@@ -1,0 +1,68 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AnimalsApp.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Width="800"
+        Height="450"
+        x:Class="AnimalsApp.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AnimalsApp">
+
+	<Window.DataContext>
+		<vm:MainWindowViewModel />
+	</Window.DataContext>
+	<Canvas>
+		<Image Source="avares://AnimalsApp/Assets/tree.png"
+           Width="100"
+           Height="200"
+           Canvas.Left="680"
+           Canvas.Top="100" />
+
+		<Image Source="{Binding AnimalImage}"
+			   Width="100"
+			   Height="100"
+			   Canvas.Left="{Binding AnimalPositionX}"
+			   Canvas.Top="{Binding AnimalPositionY}" />
+
+		<!-- Кнопки -->
+		<Button Content="Move"
+				Command="{Binding MoveAnimalCommand}"
+				Width="100"
+				Height="30"
+				Canvas.Left="10"
+				Canvas.Top="10" />
+
+		<Button Content="Stop"
+				Command="{Binding StopAnimalCommand}"
+				Width="100"
+				Height="30"
+				Canvas.Left="10"
+				Canvas.Top="50" />
+
+		<Button Content="Roar"
+				Command="{Binding RoarCommand}"
+				Width="100"
+				Height="30"
+				Canvas.Left="10"
+				Canvas.Top="90" />
+
+		<TextBlock Text="{Binding PantherVoiceText}"
+				   FontSize="16"
+				   FontWeight="Bold"
+				   Foreground="Red"
+				   IsVisible="{Binding IsVoiceVisible}"
+				   Canvas.Left="{Binding AnimalPositionX}"
+				   Canvas.Top="{Binding AnimalPositionY}"
+				   Margin="0,-20,0,0" />
+
+		<Button Content="Climb the tree"
+            Command="{Binding ClimbTreeCommand}"
+            Width="120"
+            Height="30"
+            Canvas.Left="10"
+            Canvas.Top="130" />
+	</Canvas>
+
+</Window>
