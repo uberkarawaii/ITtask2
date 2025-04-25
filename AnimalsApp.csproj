@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Content Include="Assets\dog.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\turtle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

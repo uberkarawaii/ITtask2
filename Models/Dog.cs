@@ -6,6 +6,7 @@ namespace AnimalsApp.Models
     public class Dog : Animal
     {
         public event Action? BarkEvent;
+        public double DirectionX { get; set; } = 1;
         public Dog()
         {
             Image = new Bitmap("Assets/dog.png");

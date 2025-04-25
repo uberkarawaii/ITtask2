@@ -6,6 +6,7 @@ namespace AnimalsApp.Models
     public class Panther : Animal
     {
         public event Action? VoiceEvent;
+        public double DirectionX { get; set; } = 1;
         public Panther()
         {
             Image = new Bitmap("Assets/panther.png");

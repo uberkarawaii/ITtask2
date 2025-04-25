@@ -38,6 +38,7 @@ namespace AnimalsApp.Models {
 
         public abstract void Move();
         public abstract void Stand();
+        public double DirectionX { get; set; } = 1;
     }
 }
 

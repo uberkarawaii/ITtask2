@@ -9,75 +9,66 @@ namespace AnimalsApp.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private Animal _currentAnimal;
-    private double _directionX = 1;
 
-    [ObservableProperty]
-    private string pantherVoiceText = "";
+    [ObservableProperty] private string pantherVoiceText = "";
+    [ObservableProperty] private bool isPVoiceVisible = false;
+    [ObservableProperty] private bool isOnTree = false;
 
-    [ObservableProperty]
-    private bool isVoiceVisible = false;
+    [ObservableProperty] private string dogVoiceText = "";
+    [ObservableProperty] private bool isDVoiceVisible = false;
 
-    [ObservableProperty]
-    private bool isOnTree = false;
+    public Panther Panther { get; } = new() { PositionX = 90, PositionY = 50 };
+    public Dog Dog { get; } = new() { PositionX = 90, PositionY = 250 };
+    public Turtle Turtle { get; } = new() { PositionX = 90, PositionY = 400 };
 
-    public Animal CurrentAnimal
-    {
-        get => _currentAnimal;
-        set => SetProperty(ref _currentAnimal, value);
-    }
+    public double PantherX => Panther.PositionX;
+    public double PantherY => Panther.PositionY;
+    public Bitmap PantherImage => Panther.Image;
 
-    public double AnimalPositionX => CurrentAnimal.PositionX;
-    public double AnimalPositionY => CurrentAnimal.PositionY;
-    public Bitmap AnimalImage => CurrentAnimal.Image;
+    public double DogX => Dog.PositionX;
+    public double DogY => Dog.PositionY;
+    public Bitmap DogImage => Dog.Image;
 
-    public IRelayCommand ClimbTreeCommand { get; }
-    public IRelayCommand MoveAnimalCommand { get; }
-    public IRelayCommand StopAnimalCommand { get; }
-    public IRelayCommand RoarCommand { get; }
+    public double TurtleX => Turtle.PositionX;
+    public double TurtleY => Turtle.PositionY;
+    public Bitmap TurtleImage => Turtle.Image;
+
+    public IRelayCommand PantherMoveCommand { get; }
+    public IRelayCommand PantherStopCommand { get; }
+    public IRelayCommand PantherRoarCommand { get; }
+    public IRelayCommand PantherClimbCommand { get; }
+
+    public IRelayCommand DogMoveCommand { get; }
+    public IRelayCommand DogStopCommand { get; }
+    public IRelayCommand DogBarkCommand { get; }
+
+    public IRelayCommand TurtleMoveCommand { get; }
+    public IRelayCommand TurtleStopCommand { get; }
 
     public MainWindowViewModel()
     {
-        CurrentAnimal = new Panther
-        {
-            PositionX = 90,
-            PositionY = 50
-        };
+        Panther.VoiceEvent += OnPantherRoar;
+        Dog.BarkEvent += OnDogBark;
 
-        if (CurrentAnimal is Panther panther)
+        PantherMoveCommand = new RelayCommand(() =>
         {
-            panther.VoiceEvent += OnPantherRoar;
-        }
-
-        MoveAnimalCommand = new RelayCommand(() =>
-        {
-            // Если на дереве, спускаем
-            if (IsOnTree)
-            {
-                DescendFromTree();
-            }
-
-            CurrentAnimal.Move();
+            if (isOnTree) DescendFromTree();
+            Panther.Move();
         });
 
-        StopAnimalCommand = new RelayCommand(() =>
+        PantherStopCommand = new RelayCommand(() => Panther.Stand());
+        PantherRoarCommand = new RelayCommand(() => Panther.Roar());
+        PantherClimbCommand = new RelayCommand(() =>
         {
-            CurrentAnimal.Stand();
+            if (!isOnTree) ClimbTree();
         });
 
-        RoarCommand = new RelayCommand(() =>
-        {
-            if (CurrentAnimal is Panther p)
-                p.Roar();
-        });
+        DogMoveCommand = new RelayCommand(() => Dog.Move());
+        DogStopCommand = new RelayCommand(() => Dog.Stand());
+        DogBarkCommand = new RelayCommand(() => Dog.Bark());
 
-        ClimbTreeCommand = new RelayCommand(() =>
-        {
-            if (!IsOnTree)
-            {
-                ClimbTree();
-            }
-        });
+        TurtleMoveCommand = new RelayCommand(() => Turtle.Move());
+        TurtleStopCommand = new RelayCommand(() => Turtle.Stand());
 
         _ = StartMovementLoop();
     }
@@ -88,64 +79,87 @@ public partial class MainWindowViewModel : ObservableObject
         {
             await Task.Delay(100);
 
-            if (CurrentAnimal.Speed > 0)
+            if (Panther.Speed > 0)
             {
-                MoveAnimal();
-
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    OnPropertyChanged(nameof(AnimalPositionX));
-                });
+                Move(Panther);
+                OnPropertyChanged(nameof(PantherX));
+            }
+            if (Dog.Speed > 0)
+            {
+                Move(Dog);
+                OnPropertyChanged(nameof(DogX));
+            }
+            if (Turtle.Speed > 0)
+            {
+                Move(Turtle);
+                OnPropertyChanged(nameof(TurtleX));
             }
         }
     }
 
     private void ClimbTree()
     {
-        // CurrentAnimal.Stand(); // остановить перед подъёмом
-        if (CurrentAnimal is Panther p)
+        if (Panther is Panther p)
         {
             p.ClimbTree();
             p.PositionX = 700;
             p.PositionY = 50;
-            IsOnTree = true;
+            isOnTree = true;
 
-            OnPropertyChanged(nameof(AnimalPositionX));
-            OnPropertyChanged(nameof(AnimalPositionY));
+            OnPropertyChanged(nameof(PantherX));
+            OnPropertyChanged(nameof(PantherY));
         }
     }
 
     private void DescendFromTree()
     {
-        CurrentAnimal.PositionX = 10;
-        CurrentAnimal.PositionY = 50;
-        IsOnTree = false;
+        Panther.PositionX = 10;
+        Panther.PositionY = 50;
+        isOnTree = false;
 
-        OnPropertyChanged(nameof(AnimalPositionX));
-        OnPropertyChanged(nameof(AnimalPositionY));
+        OnPropertyChanged(nameof(PantherX));
+        OnPropertyChanged(nameof(PantherY));
     }
 
-    private void MoveAnimal()
+    private void Move(Animal animal)
     {
         double maxWidth = 800;
         double animalWidth = 100;
 
-        if (CurrentAnimal.PositionX <= 0 || CurrentAnimal.PositionX >= maxWidth - animalWidth)
+        if (animal.PositionX <= 0 || animal.PositionX >= maxWidth - animalWidth)
         {
-            _directionX = -_directionX;
+            animal.DirectionX *= -1; // разворот именно этого животного
         }
 
-        CurrentAnimal.PositionX += _directionX * CurrentAnimal.Speed;
+        animal.PositionX += animal.DirectionX * animal.Speed;
     }
 
     private async void OnPantherRoar()
     {
         PantherVoiceText = "R-R-R-R-R!";
-        IsVoiceVisible = true;
+        isPVoiceVisible = true;
+        OnPropertyChanged(nameof(PantherVoiceText)); // Это важный момент
+        OnPropertyChanged(nameof(IsPVoiceVisible));
 
         await Task.Delay(3000);
-
         PantherVoiceText = "";
-        IsVoiceVisible = false;
+        isPVoiceVisible = false;
+        OnPropertyChanged(nameof(PantherVoiceText)); // Для обновления UI
+        OnPropertyChanged(nameof(IsPVoiceVisible));
     }
+
+    private async void OnDogBark()
+    {
+        DogVoiceText = "GAV-GAV-GAV-GAV-GAV!";
+        isDVoiceVisible = true;
+        OnPropertyChanged(nameof(DogVoiceText));
+        OnPropertyChanged(nameof(IsDVoiceVisible));
+
+        await Task.Delay(3000);
+        DogVoiceText = "";
+        isDVoiceVisible = false;
+        OnPropertyChanged(nameof(DogVoiceText));
+        OnPropertyChanged(nameof(IsDVoiceVisible));
+    }
+
 }

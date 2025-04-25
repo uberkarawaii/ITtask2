@@ -72,3 +72,4 @@ C:\Users\User\Desktop\vsu\6sem\InfoTech\AnimalsApp\obj\Debug\net9.0\refint\Avalo
 C:\Users\User\Desktop\vsu\6sem\InfoTech\AnimalsApp\obj\Debug\net9.0\AnimalsApp.csproj.Up2Date
 C:\Users\User\Desktop\vsu\6sem\InfoTech\AnimalsApp\obj\Debug\net9.0\AnimalsApp.genruntimeconfig.cache
 C:\Users\User\Desktop\vsu\6sem\InfoTech\AnimalsApp\obj\Debug\net9.0\ref\AnimalsApp.dll
+C:\Users\User\Desktop\vsu\6sem\InfoTech\AnimalsApp\bin\Debug\net9.0\Assets\dog.png

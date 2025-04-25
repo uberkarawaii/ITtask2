@@ -5,6 +5,7 @@ namespace AnimalsApp.Models
 {
     public class Turtle : Animal
     {
+        public double DirectionX { get; set; } = 1;
         public Turtle()
         {
             Image = new Bitmap("Assets/turtle.png");

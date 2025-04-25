@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Width="800"
-        Height="450"
+        Height="500"
         x:Class="AnimalsApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -13,56 +13,91 @@
 	<Window.DataContext>
 		<vm:MainWindowViewModel />
 	</Window.DataContext>
+
 	<Canvas>
 		<Image Source="avares://AnimalsApp/Assets/tree.png"
-           Width="100"
-           Height="200"
-           Canvas.Left="680"
-           Canvas.Top="100" />
+               Width="100" Height="200"
+               Canvas.Left="680" Canvas.Top="100" />
 
-		<Image Source="{Binding AnimalImage}"
-			   Width="100"
-			   Height="100"
-			   Canvas.Left="{Binding AnimalPositionX}"
-			   Canvas.Top="{Binding AnimalPositionY}" />
+		<Image Source="{Binding PantherImage}"
+               Width="100" Height="100"
+               Canvas.Left="{Binding PantherX}"
+               Canvas.Top="{Binding PantherY}" />
 
-		<!-- Кнопки -->
-		<Button Content="Move"
-				Command="{Binding MoveAnimalCommand}"
-				Width="100"
-				Height="30"
-				Canvas.Left="10"
-				Canvas.Top="10" />
+		<Image Source="{Binding DogImage}"
+               Width="100" Height="100"
+               Canvas.Left="{Binding DogX}"
+               Canvas.Top="{Binding DogY}" />
 
-		<Button Content="Stop"
-				Command="{Binding StopAnimalCommand}"
-				Width="100"
-				Height="30"
-				Canvas.Left="10"
-				Canvas.Top="50" />
+		<Image Source="{Binding TurtleImage}"
+               Width="100" Height="100"
+               Canvas.Left="{Binding TurtleX}"
+               Canvas.Top="{Binding TurtleY}" />
+
+		<!-- Panther Buttons -->
+		<Button Content="Move Panther"
+                Command="{Binding PantherMoveCommand}"
+                Width="120" Height="30"
+                Canvas.Left="10" Canvas.Top="10" />
+
+		<Button Content="Stop Panther"
+                Command="{Binding PantherStopCommand}"
+                Width="120" Height="30"
+                Canvas.Left="140" Canvas.Top="10" />
 
 		<Button Content="Roar"
-				Command="{Binding RoarCommand}"
-				Width="100"
-				Height="30"
-				Canvas.Left="10"
-				Canvas.Top="90" />
-
-		<TextBlock Text="{Binding PantherVoiceText}"
-				   FontSize="16"
-				   FontWeight="Bold"
-				   Foreground="Red"
-				   IsVisible="{Binding IsVoiceVisible}"
-				   Canvas.Left="{Binding AnimalPositionX}"
-				   Canvas.Top="{Binding AnimalPositionY}"
-				   Margin="0,-20,0,0" />
+                Command="{Binding PantherRoarCommand}"
+                Width="120" Height="30"
+                Canvas.Left="270" Canvas.Top="10" />
 
 		<Button Content="Climb the tree"
-            Command="{Binding ClimbTreeCommand}"
-            Width="120"
-            Height="30"
-            Canvas.Left="10"
-            Canvas.Top="130" />
+                Command="{Binding PantherClimbCommand}"
+                Width="120" Height="30"
+                Canvas.Left="400" Canvas.Top="10" />
+
+		<TextBlock Text="{Binding PantherVoiceText}"
+                   FontSize="16" FontWeight="Bold" Foreground="Red"
+                   IsVisible="{Binding IsPVoiceVisible}"
+                   Canvas.Left="{Binding PantherX}"
+                   Canvas.Top="{Binding PantherY}"
+                   Margin="0,-20,0,0" />
+
+		<!-- Dog Buttons -->
+		<Button Content="Move Dog"
+                Command="{Binding DogMoveCommand}"
+                Width="120" Height="30"
+                Canvas.Left="10" Canvas.Top="150" />
+
+		<Button Content="Stop Dog"
+                Command="{Binding DogStopCommand}"
+                Width="120" Height="30"
+                Canvas.Left="140" Canvas.Top="150" />
+
+		<Button Content="Bark"
+                Command="{Binding DogBarkCommand}"
+                Width="120" Height="30"
+                Canvas.Left="270" Canvas.Top="150" />
+
+		<TextBlock Text="{Binding DogVoiceText}"
+				   FontSize="16"
+				   FontWeight="Bold"
+				   Foreground="Blue"
+				   IsVisible="{Binding IsDVoiceVisible}"
+				   Canvas.Left="{Binding DogX}"
+				   Canvas.Top="{Binding DogY}"
+				   Margin="0,-20,0,0" />
+
+		<!-- Turtle Buttons -->
+		<Button Content="Move Turtle"
+                Command="{Binding TurtleMoveCommand}"
+                Width="120" Height="30"
+                Canvas.Left="10" Canvas.Top="300" />
+
+		<Button Content="Stop Turtle"
+                Command="{Binding TurtleStopCommand}"
+                Width="120" Height="30"
+                Canvas.Left="140" Canvas.Top="300" />
+
 	</Canvas>
 
 </Window>
